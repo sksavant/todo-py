@@ -58,7 +58,8 @@ class todo(cmd.Cmd):
         tasks_pending.append(task_add)
     
     def do_printall(self,line):
-        print tasks_pending
+        for e in tasks_pending:
+            print e
     
     def do_exit(self,line):
         return True
