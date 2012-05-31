@@ -1,0 +1,24 @@
+Written by Savant Krishna : savant.2020@gmail.com
+
+This is a command based TODO list program written in python.
+Why one more TODO program?
+    As a practice on using the command based dispatcher.
+    Although this is in python, I guess that in C++ would be similar.
+    I would like to add all kinds of functionality to it.
+
+TODO list program :
+Functionalities needed :
+Function to add task : A task is a list that has a unique index,
+a task string, due date, importance and tag(s) attached to it.
+Function to modify a task, ,it's due date or importance or the string or tags
+Function to sort the task based on due date or importance or both
+Function to say that a task has been completed with the time of completion
+
+The program is at todo.py
+Uses the cmd module to recursively take input
+
+
+
+
+
+
