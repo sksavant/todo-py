@@ -64,7 +64,11 @@ class todo(cmd.Cmd):
     def do_exit(self,line):
         return True
 
-
+    def do_save(self,line):
+        fo=open('tasklist.txt','w')
+        for e in tasks_pending:
+            fo.write(str(e)+'\n')
+        fo.close()
 #def modify(task,whattomod,modtask):
 	# search for the task in the tasks_pending or tasks_done and
 	# see whattomod (what to be modified) and modify it. Then write
@@ -78,8 +82,8 @@ class todo(cmd.Cmd):
 #def finish(taskid,):
 
 
-#def writetofile():
 
+    
 
 '''def parser(input_string):
 	stop=0
