@@ -49,14 +49,12 @@ class todo(cmd.Cmd):
                 task_add.append(int(taskimp))
                 taskimp=''
                 indexoft=3
-            elif(not e=='\n') and indexoft==3:
+            elif(not e=='.') and indexoft==3:
                 tasktag=tasktag+e
-            elif(e=='\n') :
-            	if len(task_add) == 3 :
-	                task_add.append(tasktag)	            	
-		        tasktag=''
+            elif(e=='.') and indexoft==3 :
+                task_add.append(tasktag)	            	
+                tasktag=''
                 indexoft=0
-
         tasks_pending.append(task_add)
     
     def do_printall(self,line):
