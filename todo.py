@@ -10,7 +10,6 @@
 # Function to say that a task has been completed with the time of completion
 #
 import cmd
-
 tasks_pending=[]
 tasklists_done=[]
 
@@ -43,18 +42,15 @@ class todo(cmd.Cmd):
                 task_add.append(tasktime)
                 tasktime=''
                 indexoft=2
-            elif(not e=='@') and indexoft==2:
+            elif(not (e=='@' or e==' ')) and indexoft==2:
                 taskimp=taskimp+e
-            elif(e=='@') and indexoft==2:
+            elif(e=='@' or e==' ') and indexoft==2:
                 task_add.append(int(taskimp))
                 taskimp=''
                 indexoft=3
-            elif(not e=='.') and indexoft==3:
+            elif indexoft==3:
                 tasktag=tasktag+e
-            elif(e=='.') and indexoft==3 :
-                task_add.append(tasktag)	            	
-                tasktag=''
-                indexoft=0
+        task_add.append(tasktag)
         tasks_pending.append(task_add)
     
     def do_printall(self,line):
