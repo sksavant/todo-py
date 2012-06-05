@@ -14,19 +14,23 @@ tasks_pending=[]
 tasklists_done=[]
 
 class todo(cmd.Cmd):
-
     prompt='todo :'
+    tasks_index=0
+
+    @classmethod
+    def incrindex(self):
+        todo.tasks_index=todo.tasks_index+1
 
     def do_add(self,line):
         #if string is add Going to there @tomorrow 9 @travel :
         # give the command add(['1','Going to there','30/05/2012','9',['travel']])
         task_add=[]
+        task_add.append(todo.tasks_index)
+        todo.incrindex()
         tasktime=''
         taskstr=''
         taskimp=''
         tasktag=''
-        # task_index+=1
-        # task_add.append(task_index)
         indexoft=0
         for e in line :
             if (not e=='@') and indexoft==0 :
@@ -52,11 +56,11 @@ class todo(cmd.Cmd):
                 tasktag=tasktag+e
         task_add.append(tasktag)
         tasks_pending.append(task_add)
-    
+
     def do_printall(self,line):
         for e in tasks_pending:
             print e
-    
+
     def do_exit(self,line):
         return True
 
@@ -66,9 +70,9 @@ class todo(cmd.Cmd):
             fo.write(str(e)+'\n')
         fo.close()
 #def modify(task,whattomod,modtask):
-	# search for the task in the tasks_pending or tasks_done and
-	# see whattomod (what to be modified) and modify it. Then write
-	# the modified task into the tasks_* list
+    # search for the task in the tasks_pending or tasks_done and
+    # see whattomod (what to be modified) and modify it. Then write
+    # the modified task into the tasks_* list
 
 
 
@@ -79,11 +83,11 @@ class todo(cmd.Cmd):
 
 
 
-    
+
 
 '''def parser(input_string):
-	stop=0
-	while not stop:
+    stop=0
+    while not stop:
 '''
 
 todo().cmdloop()
