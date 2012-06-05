@@ -8,13 +8,14 @@ Why one more TODO program?
 
 TODO list program :
 Functionalities needed :
-Function to add task : A task is a list that has a unique index,
+(DONE)#Function to add task : A task is a list that has a unique index,
 a task string, due date, importance and tag(s) attached to it.
-Function to modify a task, ,it's due date or importance or the string or tags
-Function to sort the task based on due date or importance or both
-Function to say that a task has been completed with the time of completion
+(TODO)*Function to modify a task, ,it's due date or importance or the string or tags
+(TODO)*Function to sort the task based on due date or importance or both
+(TODO)*Function to say that a task has been completed with the time of completion
 
 The program is at todo.py
+It is run using the command "python todo.py" from the terminal.
 Uses the cmd module to recursively take input
 
 
