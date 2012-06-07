@@ -1,6 +1,4 @@
 # Written by Savant Krishna : savant.2020@gmail.com
-# 
-# 
 # TODO list program :
 # Functionalities needed :
 # Function to add task : A task is a list that has a unique index,
@@ -45,6 +43,8 @@ class todo(cmd.Cmd):
         #if string is add Going to there @tomorrow 9 @travel :
         # give the command add(['1','Going to there','30/05/2012','9',['travel']])
         task_add=[]
+        if not tasks_pending:
+            todo.tasks_index=0
         task_add.append(todo.tasks_index)
         todo.incrindex()
         tasktime=''
@@ -109,10 +109,20 @@ class todo(cmd.Cmd):
         return True
 
     def do_save(self,line):
-        fo=open('tasklist.txt','w')
-        for e in tasks_pending:
-            fo.write(str(e)+'\n')
-        fo.close()
+        if not line:
+            fo=open('tasklist.txt','w')
+            for e in tasks_pending:
+                fo.write(str(e[1:])+'\n')
+            fo.close()
+        else:
+            try:
+                fo=open(line,'w')
+            except IOError:
+                print "The file "+line+" cannot be created"
+            else:
+                for e in tasks_pending:
+                    fo.write(str(e[1:])+'\n')
+                fo.close()
 #def modify(task,whattomod,modtask):
     # search for the task in the tasks_pending or tasks_done and
     # see whattomod (what to be modified) and modify it. Then write
@@ -133,7 +143,7 @@ class todo(cmd.Cmd):
     stop=0
     while not stop:
 '''
-
+print "Hi, This is a simple command based TODO list program written in python.\nType 'help' to see all the possible commands and their functions"
 todo().cmdloop()
 
 
