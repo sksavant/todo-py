@@ -11,7 +11,8 @@
 #
 import cmd
 tasks_pending=[]
-tasklists_done=[]
+tasks_done=[]
+tasks_got=[]
 
 class todo(cmd.Cmd):
     prompt='todo :'
@@ -20,6 +21,25 @@ class todo(cmd.Cmd):
     @classmethod
     def incrindex(self):
         todo.tasks_index=todo.tasks_index+1
+
+    @classmethod
+    def parselist(self,fline):
+        task=[]
+        listind=0
+        now=''
+        for char in fline:
+            if char==',':
+                if listind==2:
+                    task.append(int(now))
+                elif listind==0 or listind==1:
+                    task.append(now[0:len(now)])
+                now=''
+                listind=listind+1
+            elif char=='\n':
+                task.append(now[0:len(now)])
+            elif not (char=='[' or char=='\'' or char==']'):
+                now=now+char
+        return task
 
     def do_add(self,line):
         #if string is add Going to there @tomorrow 9 @travel :
@@ -56,6 +76,30 @@ class todo(cmd.Cmd):
                 tasktag=tasktag+e
         task_add.append(tasktag)
         tasks_pending.append(task_add)
+
+    def do_get(self,line):
+        if line and not (line=='save' or line=='print'):
+            task_file=''
+            for e in line:
+                task_file=task_file+e
+        else:
+            task_file="tasklist.txt"
+        try:
+            tf_read=open(task_file,'r')
+        except IOError:
+            print "Cannot open",task_file
+        else:
+            file_content=tf_read.readlines()
+            tf_read.close()
+            for fline in file_content:
+                taskg=todo.parselist(fline)
+                tasks_got.append(taskg)
+                if line=='save':
+                    taskg=[todo.tasks_index]+taskg
+                    tasks_pending.append(taskg)
+                    todo.incrindex()
+                elif line=='print':
+                    print taskg
 
     def do_printall(self,line):
         for e in tasks_pending:
