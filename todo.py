@@ -101,9 +101,67 @@ class todo(cmd.Cmd):
                 elif line=='print':
                     print taskg
 
-    def do_printall(self,line):
-        for e in tasks_pending:
-            print e
+    def do_finish(self,line):
+        #"finish taskid" will say that the task has been completed and will remove it from the tasks_pending and add it to tasks_done
+        idnow=''
+        finid=[]
+        for l in line:
+            if l==',' or l==' ':
+                try:
+                    finid.append(int(idnow))
+                except ValueError:
+                    print "Invalid id number "+idnow
+                idnow=''
+            else:
+                idnow=idnow+l
+        try:
+            finid.append(int(idnow))
+        except ValueError:
+            print "Invalid id number "+idnow
+        for e in finid:
+            foundind=-1
+            for i in range(len(tasks_pending)):    
+                    if e==tasks_pending[i][0]:
+                        tasks_done.append(tasks_pending[i])
+                        print "Congrats! You've completed the task \'"+tasks_pending[i][1]+"\'."
+                        print
+                        foundind=i
+            if foundind==-1:
+                indindone=0
+                for x in tasks_done:
+                    if x[1]==e:
+                        indindone=1
+                if not indindone:
+                    print "No task with id "+str(e)+" found. \nSee the ids of all tasks with \'print\'"
+                else:
+                    print "The task with id "+str(e)+" is already completed! Yay!"
+            else:
+                tasks_pending.pop(foundind)
+
+    def do_print(self,line):
+        pt=0
+        dt=0
+        if not line:   
+            pt=1
+            dt=1
+        elif line=='pending':
+            pt=1
+        elif line=='done':
+            dt=1
+        if pt:
+            if tasks_pending:
+                print "Pending tasks are :" 
+            else:
+                print "No pending tasks! \nAdd tasks with \'add task @due imp @tags\'"   
+            for e in tasks_pending:
+                print e
+        if dt:    
+            if tasks_done:
+                print "Completed tasks are :"
+            else:
+                print "No completed tasks yet! \nTo mark a task as finished: \'finish task_index\'"
+            for f in tasks_done:
+                print f
 
     def do_exit(self,line):
         return True
