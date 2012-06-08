@@ -14,7 +14,7 @@ a task string, due date, importance and tag(s) attached to it.
 (DONE)#Function to save list to file : save "filename" saves the list. 'save' saves as default to "tasklist.txt"
 (TODO)*1Function to modify a task, ,it's due date or importance or the string or tags
 (TODO)*2Function to sort the task based on due date or importance or both
-(TODO)*0Function to say that a task has been completed with the time of completion
+(DONE)#Function to say that a task has been completed with the time of completion
 
 The program is at todo.py
 It is run using the command "python todo.py" from the terminal.
