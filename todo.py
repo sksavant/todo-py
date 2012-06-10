@@ -24,8 +24,17 @@ class todo(cmd.Cmd):
     def parselist(self,fline):
         task=[]
         listind=0
+        gotcat=0
         now=''
-        for char in fline:
+        if fline[0]=='d':
+            taskcat='d'
+            gotcat=1
+        elif fline[0]=='p':
+            taskcat='p'
+            gotcat=1
+        else:
+            taskcat='p'
+        for char in fline[gotcat:]:
             if char==',':
                 if listind==2:
                     task.append(int(now))
@@ -37,7 +46,7 @@ class todo(cmd.Cmd):
                 task.append(now[0:len(now)])
             elif not (char=='[' or char=='\'' or char==']'):
                 now=now+char
-        return task
+        return task,taskcat
 
     def do_add(self,line):
         #if string is add Going to there @tomorrow 9 @travel :
@@ -92,14 +101,17 @@ class todo(cmd.Cmd):
             file_content=tf_read.readlines()
             tf_read.close()
             for fline in file_content:
-                taskg=todo.parselist(fline)
-                tasks_got.append(taskg)
+                taskg,taskcat=todo.parselist(fline)
+                tasks_got.append(str(taskcat)+str(taskg))
                 if line=='save':
                     taskg=[todo.tasks_index]+taskg
-                    tasks_pending.append(taskg)
+                    if taskcat=='p':
+                        tasks_pending.append(taskg)
+                    elif taskcat=='d':
+                        tasks_done.append(taskg)
                     todo.incrindex()
                 elif line=='print':
-                    print taskg
+                    print str(taskcat)+str(taskg)
 
     def do_finish(self,line):
         #"finish taskid" will say that the task has been completed and will remove it from the tasks_pending and add it to tasks_done
@@ -170,7 +182,9 @@ class todo(cmd.Cmd):
         if not line:
             fo=open('tasklist.txt','w')
             for e in tasks_pending:
-                fo.write(str(e[1:])+'\n')
+                fo.write("p"+str(e[1:])+'\n')
+            for f in tasks_done:
+                fo.write("d"+str(f[1:])+'\n')
             fo.close()
         else:
             try:
@@ -179,7 +193,9 @@ class todo(cmd.Cmd):
                 print "The file "+line+" cannot be created"
             else:
                 for e in tasks_pending:
-                    fo.write(str(e[1:])+'\n')
+                    fo.write("p"+str(e[1:])+'\n')
+                for f in tasks_done:
+                    fo.write("d"+str(f[1:])+'\n')
                 fo.close()
 #def modify(task,whattomod,modtask):
     # search for the task in the tasks_pending or tasks_done and
