@@ -11,6 +11,7 @@ import cmd
 tasks_pending=[]
 tasks_done=[]
 tasks_got=[]
+tasks_deleted=[]
 
 class todo(cmd.Cmd):
     prompt='todo :'
@@ -24,16 +25,17 @@ class todo(cmd.Cmd):
     def parselist(self,fline):
         task=[]
         listind=0
-        gotcat=0
+        gotcat=1
         now=''
         if fline[0]=='d':
             taskcat='d'
-            gotcat=1
         elif fline[0]=='p':
             taskcat='p'
-            gotcat=1
+        elif fline[0]=='t':
+            taskcat='t'
         else:
             taskcat='p'
+            gotcat=0
         for char in fline[gotcat:]:
             if char==',':
                 if listind==2:
@@ -47,6 +49,25 @@ class todo(cmd.Cmd):
             elif not (char=='[' or char=='\'' or char==']'):
                 now=now+char
         return task,taskcat
+    
+    @classmethod
+    def parseindex(self,fline):
+        idnow=''
+        tid=[]
+        for l in fline:
+            if l==',' or l==' ':
+                try:
+                    tid.append(int(idnow))
+                except ValueError:
+                    print "Invalid id number "+idnow
+                idnow=''
+            else:
+                idnow=idnow+l
+        try:
+            tid.append(int(idnow))
+        except ValueError:
+            print "Invalid id number "+idnow
+        return tid
 
     def do_add(self,line):
         #if string is add Going to there @tomorrow 9 @travel :
@@ -109,34 +130,21 @@ class todo(cmd.Cmd):
                         tasks_pending.append(taskg)
                     elif taskcat=='d':
                         tasks_done.append(taskg)
+                    elif taskcat=='t':
+                        tasks_deleted.append(taskg)
                     todo.incrindex()
                 elif line=='print':
                     print str(taskcat)+str(taskg)
 
     def do_finish(self,line):
         #"finish taskid" will say that the task has been completed and will remove it from the tasks_pending and add it to tasks_done
-        idnow=''
-        finid=[]
-        for l in line:
-            if l==',' or l==' ':
-                try:
-                    finid.append(int(idnow))
-                except ValueError:
-                    print "Invalid id number "+idnow
-                idnow=''
-            else:
-                idnow=idnow+l
-        try:
-            finid.append(int(idnow))
-        except ValueError:
-            print "Invalid id number "+idnow
+        finid=todo.parseindex(line)
         for e in finid:
             foundind=-1
             for i in range(len(tasks_pending)):    
                     if e==tasks_pending[i][0]:
                         tasks_done.append(tasks_pending[i])
                         print "Congrats! You've completed the task \'"+tasks_pending[i][1]+"\'."
-                        print
                         foundind=i
             if foundind==-1:
                 indindone=0
@@ -153,6 +161,7 @@ class todo(cmd.Cmd):
     def do_print(self,line):
         pt=0
         dt=0
+        tt=0
         if not line:   
             pt=1
             dt=1
@@ -160,6 +169,8 @@ class todo(cmd.Cmd):
             pt=1
         elif line=='done':
             dt=1
+        elif line=='deleted':
+            tt=1
         if pt:
             if tasks_pending:
                 print "Pending tasks are :" 
@@ -174,29 +185,72 @@ class todo(cmd.Cmd):
                 print "No completed tasks yet! \nTo mark a task as finished: \'finish task_index\'"
             for f in tasks_done:
                 print f
+        if tt:
+            if tasks_deleted:
+                print "Deleted tasks are :"
+            else:
+                print "No Deleted tasks! \nTo delete a task : \'delete task_index\'"
+            for g in tasks_deleted:
+                print g
+
+    def do_delete(self,line):
+        #Deletes a task : command is delete taskid
+        delid=todo.parseindex(line)
+        for e in delid:
+            foundind=-1
+            foundinpending=0
+            for i in range(len(tasks_pending)):
+                if e==tasks_pending[i][0]:
+                    foundind=i
+                    foundinpending=1
+                    print "The task \'"+tasks_pending[i][1]+"\' has been deleted"
+            if foundind==-1:
+                for i in range(len(tasks_done)):
+                    if e==tasks_done[i][0]:
+                        foundind=i
+                        print "The task \'"+tasks_pending[i][1]+"\' has been deleted"                        
+            if foundind==-1:
+                for i in range(len(tasks_deleted)):
+                    indindel=0
+                    if e==tasks_deleted[i][0]:
+                        indindel=1
+                if not indindel:
+                    print "No task with id "+str(e)+" found. \nSee the ids of all tasks with \'print\'"
+                else:
+                    print "The task with id "+str(e)+" is already deleted!"
+            elif not foundind==-1:
+                if foundinpending:
+                    tasks_deleted.append(tasks_pending[foundind])
+                    tasks_pending.pop(foundind)
+                else:
+                    tasks_deleted.append(tasks_done[foundind])
+                    tasks_done.pop(foundind)
 
     def do_exit(self,line):
         return True
 
     def do_save(self,line):
+        fileopened=0
         if not line:
             fo=open('tasklist.txt','w')
-            for e in tasks_pending:
-                fo.write("p"+str(e[1:])+'\n')
-            for f in tasks_done:
-                fo.write("d"+str(f[1:])+'\n')
-            fo.close()
+            fileopened=1
         else:
             try:
                 fo=open(line,'w')
             except IOError:
                 print "The file "+line+" cannot be created"
             else:
-                for e in tasks_pending:
-                    fo.write("p"+str(e[1:])+'\n')
-                for f in tasks_done:
-                    fo.write("d"+str(f[1:])+'\n')
-                fo.close()
+                fileopened=1
+        if fileopened:
+            for e in tasks_pending:
+                fo.write("p"+str(e[1:])+'\n')
+            for f in tasks_done:
+                fo.write("d"+str(f[1:])+'\n')
+            for g in tasks_deleted:
+                fo.write("t"+str(g[1:])+'\n')
+            fo.close()
+
+    
 #def modify(task,whattomod,modtask):
     # search for the task in the tasks_pending or tasks_done and
     # see whattomod (what to be modified) and modify it. Then write
