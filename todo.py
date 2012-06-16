@@ -99,7 +99,12 @@ class todo(cmd.Cmd):
             elif(not (e=='@' or e==' ')) and indexoft==2:
                 taskimp=taskimp+e
             elif(e=='@' or e==' ') and indexoft==2:
-                task_add.append(int(taskimp))
+                try:
+                    task_add.append(int(taskimp))
+                except ValueError:
+                    print "Invalid importance number"+taskimp
+                    print "Setting importance 0. Please change with modify"
+                    task_add.append(0)
                 taskimp=''
                 indexoft=3
             elif indexoft==3:
