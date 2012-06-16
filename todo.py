@@ -255,7 +255,12 @@ class todo(cmd.Cmd):
                 fo.write("t"+str(g[1:])+'\n')
             fo.close()
 
-    
+    def do_pp(self,line):
+        todo.do_print(self,"pending") #shortcut pp will Print Pending
+
+    def do_pd(self,line):
+        todo.do_print(self,"done") #pd will Print Done
+
 #def modify(task,whattomod,modtask):
     # search for the task in the tasks_pending or tasks_done and
     # see whattomod (what to be modified) and modify it. Then write
