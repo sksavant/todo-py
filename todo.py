@@ -39,7 +39,12 @@ class todo(cmd.Cmd):
         for char in fline[gotcat:]:
             if char==',':
                 if listind==2:
-                    task.append(int(now))
+                    try:
+                        task.append(int(now))
+                    except ValueError:
+                        print "Invalid importance "+now+" :not an integer"
+                        print "Task got till now is"+str(task)+"\n Deleting it"
+                        return [],""
                 elif listind==0 or listind==1:
                     task.append(now[0:len(now)])
                 now=''
@@ -128,18 +133,19 @@ class todo(cmd.Cmd):
             tf_read.close()
             for fline in file_content:
                 taskg,taskcat=todo.parselist(fline)
-                tasks_got.append(str(taskcat)+str(taskg))
-                if line=='save':
-                    taskg=[todo.tasks_index]+taskg
-                    if taskcat=='p':
-                        tasks_pending.append(taskg)
-                    elif taskcat=='d':
-                        tasks_done.append(taskg)
-                    elif taskcat=='t':
-                        tasks_deleted.append(taskg)
-                    todo.incrindex()
-                elif line=='print':
-                    print str(taskcat)+str(taskg)
+                if taskcat:
+                    tasks_got.append(str(taskcat)+str(taskg))
+                    if line=='save':
+                        taskg=[todo.tasks_index]+taskg
+                        if taskcat=='p':
+                            tasks_pending.append(taskg)
+                        elif taskcat=='d':
+                            tasks_done.append(taskg)
+                        elif taskcat=='t':
+                            tasks_deleted.append(taskg)
+                        todo.incrindex()
+                    elif line=='print':
+                        print str(taskcat)+str(taskg)
 
     def do_finish(self,line):
         #"finish taskid" will say that the task has been completed and will remove it from the tasks_pending and add it to tasks_done
