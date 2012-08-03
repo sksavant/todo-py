@@ -219,7 +219,10 @@ class todo(cmd.Cmd):
                 for i in range(len(tasks_done)):
                     if e==tasks_done[i][0]:
                         foundind=i
-                        print "The task \'"+tasks_pending[i][1]+"\' has been deleted"                        
+                        try:
+                            print "The task \'"+tasks_done[i][1]+"\' has been deleted"                        
+                        except IndexError:
+                            print "Not able to delete task with id :"+str(e)
             if foundind==-1:
                 for i in range(len(tasks_deleted)):
                     indindel=0
