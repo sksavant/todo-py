@@ -124,7 +124,7 @@ class todo(cmd.Cmd):
             for e in line:
                 task_file=task_file+e
         else:
-            task_file="tasklist.txt"
+            task_file="/home/savant/todo/tasklist.txt"
         try:
             tf_read=open(task_file,'r')
         except IOError:
@@ -247,7 +247,7 @@ class todo(cmd.Cmd):
     def do_save(self,line):
         fileopened=0
         if not line:
-            fo=open('tasklist.txt','w')
+            fo=open('/home/savant/todo/tasklist.txt','w')
             fileopened=1
         else:
             try:
