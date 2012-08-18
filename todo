@@ -177,33 +177,60 @@ class todo(cmd.Cmd):
         if not line:
             pt=1
             dt=1
-        elif line=='pending':
+        elif 'pending' in line:
             pt=1
-        elif line=='done':
+            line=line[8:];
+        elif 'done' in line:
             dt=1
-        elif line=='deleted':
+            line=line[4:];
+        elif 'deleted' in line:
             tt=1
+            line=line[7:];
+        else:
+            pt=1
+
         if pt:
             if tasks_pending:
                 print "Pending tasks are :"
             else:
                 print "No pending tasks! \nAdd tasks with \'add task @due imp @tags\'"
             for e in tasks_pending:
-                print e
+                for x in e:
+                    if line:
+                        if line in str(x):
+                            print e
+                            break
+                    else:
+                        print e
+                        break
         if dt:
             if tasks_done:
                 print "Completed tasks are :"
             else:
                 print "No completed tasks yet! \nTo mark a task as finished: \'finish task_index\'"
             for f in tasks_done:
-                print f
+                for x in f:
+                    if line:
+                        if line in str(x):
+                            print f
+                            break
+                    else:
+                        print f
+                        break
         if tt:
             if tasks_deleted:
                 print "Deleted tasks are :"
             else:
                 print "No Deleted tasks! \nTo delete a task : \'delete task_index\'"
             for g in tasks_deleted:
-                print g
+                for x in g:
+                    if line:
+                        if line in str(x):
+                            print g
+                            break
+                    else:
+                        print g
+                        break
 
     def do_delete(self,line):
         #Deletes a task : command is delete taskid
@@ -266,10 +293,16 @@ class todo(cmd.Cmd):
             fo.close()
 
     def do_pp(self,line):
-        todo.do_print(self,"pending") #shortcut pp will Print Pending
+        if line:
+            todo.do_print(self,"pending "+line) #shortcut pp will Print Pending
+        else:
+            todo.do_print(self,"pending")
 
     def do_pd(self,line):
-        todo.do_print(self,"done") #pd will Print Done
+        if line:
+            todo.do_print(self,"done "+line)
+        else:
+            todo.do_print(self,"done") #pd will Print Done
 
 #def modify(task,whattomod,modtask):
     # search for the task in the tasks_pending or tasks_done and
