@@ -304,6 +304,18 @@ class todo(cmd.Cmd):
         else:
             todo.do_print(self,"done") #pd will Print Done
 
+    def do_help(self,line):
+        if line=='print':
+            print "##"+line+": Usage"
+            print "##print : Prints all the pending and completed tasks"
+        elif line=="pp":
+            print "##"+line+": Usage"
+            print "##pp : Same as \'print pending\'"
+        else:
+            print "##Type help <command> to get help for that command"
+            print "##Possible commads are:"
+            print "##add     delete  exit    finish  get     help    pd      pp      print   save   "
+
 #def modify(task,whattomod,modtask):
     # search for the task in the tasks_pending or tasks_done and
     # see whattomod (what to be modified) and modify it. Then write
