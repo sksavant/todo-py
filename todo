@@ -182,10 +182,10 @@ class todo(cmd.Cmd):
             line=line[8:];
         elif 'done' in line:
             dt=1
-            line=line[4:];
+            line=line[5:];
         elif 'deleted' in line:
             tt=1
-            line=line[7:];
+            line=line[8:];
         else:
             pt=1
 
