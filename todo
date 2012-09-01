@@ -179,13 +179,13 @@ class todo(cmd.Cmd):
             dt=1
         elif 'pending' in line:
             pt=1
-            line=line[8:];
+            line=line[8:].lower();
         elif 'done' in line:
             dt=1
-            line=line[5:];
+            line=line[5:].lower();
         elif 'deleted' in line:
             tt=1
-            line=line[8:];
+            line=line[8:].lower();
         else:
             pt=1
 
@@ -197,7 +197,7 @@ class todo(cmd.Cmd):
             for e in tasks_pending:
                 for x in e:
                     if line:
-                        if line in str(x):
+                        if line in str(x).lower():
                             print e
                             break
                     else:
@@ -211,7 +211,7 @@ class todo(cmd.Cmd):
             for f in tasks_done:
                 for x in f:
                     if line:
-                        if line in str(x):
+                        if line in str(x).lower():
                             print f
                             break
                     else:
@@ -225,7 +225,7 @@ class todo(cmd.Cmd):
             for g in tasks_deleted:
                 for x in g:
                     if line:
-                        if line in str(x):
+                        if line in str(x).lower():
                             print g
                             break
                     else:
